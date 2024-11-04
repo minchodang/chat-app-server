@@ -3,6 +3,7 @@ import { createServer } from 'http';
 import app from './app';
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
+import ioProcess from './utils/io';
 
 config();
 
@@ -14,16 +15,7 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('client is connected', socket.id);
-  socket.on('disconnect', (reason) => {
-    console.log(`user is disconnected due to ${reason}`);
-  });
-
-  socket.on('error', (err) => {
-    console.error('Socket.IO error:', err);
-  });
-});
+ioProcess({ io });
 
 const port = process.env.PORT || 3000;
 
